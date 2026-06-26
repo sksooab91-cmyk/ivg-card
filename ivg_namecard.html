@@ -112,16 +112,15 @@ body {
   line-height: 1.7;
   margin-bottom: 14px;
 }
-.info-contacts { display: flex; flex-direction: column; gap: 6px; }
-.contact-row { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #111; }
+.info-contacts { display: flex; flex-direction: column; gap: 7px; }
+.contact-row { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #111; }
 .icon {
-  width: 21px; height: 21px;
+  width: 22px; height: 22px;
   background: #1c3eb8;
-  border-radius: 3px;
+  border-radius: 4px;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.icon svg { width: 11px; height: 11px; fill: #fff; }
 .contact-inline { display: flex; align-items: center; gap: 40px; }
 .btn {
   display: flex;
@@ -142,8 +141,6 @@ body {
   flex-shrink: 0;
 }
 .btn:hover { background: #1530a0; }
-
-/* PNG 저장 전용 페이지 */
 .save-page {
   display: none;
   flex-direction: column;
@@ -171,8 +168,6 @@ body {
 }
 .save-btn:hover { background: #1530a0; }
 .save-btn:disabled { background: #aaa; cursor: default; }
-
-/* 편집 페이지 */
 .edit-page {
   display: flex;
   flex-direction: column;
@@ -183,7 +178,6 @@ body {
 </head>
 <body>
 
-<!-- 편집 페이지 -->
 <div class="edit-page" id="edit-page">
   <div class="editor">
     <h3>✏️ 텍스트 편집</h3>
@@ -193,7 +187,7 @@ body {
       <label>직책 (한국어)<input id="f-title-kr" value="파트장 / 디자인센터" oninput="update()"></label>
       <label>직책 (영문)<input id="f-title-en" value="Part Lead / Design Center" oninput="update()"></label>
       <label>이메일<input id="f-email" value="sjlee@ivg.co.kr" oninput="update()"></label>
-      <label>전화번호<input id="f-phone" value="+82  10-8276-2287" oninput="update()"></label>
+      <label>전화번호<input id="f-phone" value="+82 10-8276-2287" oninput="update()"></label>
       <label style="grid-column:span 2">주소<input id="f-addr" value="경기도 고양시 덕양구 청초로 10, 덕은지엘메트로시티 지식산업센터 AA 1505호" oninput="update()"></label>
     </div>
   </div>
@@ -214,26 +208,38 @@ body {
       <div class="info-contacts">
         <div class="contact-inline">
           <div class="contact-row">
-            <div class="icon"><svg viewBox="0 0 20 16"><path d="M0 0h20v16H0V0zm1 1.5V15h18V1.5L10 9 1 1.5zM1.8 1L10 8.2 18.2 1H1.8z"/></svg></div>
+            <div class="icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                <polyline points="2,4 12,14 22,4" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+              </svg>
+            </div>
             <span id="d-email">sjlee@ivg.co.kr</span>
           </div>
           <div class="contact-row">
-            <div class="icon"><svg viewBox="0 0 20 20"><path d="M5.3 2.1c-.7-.4-1.6-.1-2 .6L2.1 4.3c-.5.8-.2 1.8.5 2.3 1.5 1 3.1 2.4 4.6 3.9 1.5 1.5 2.9 3.1 3.9 4.6.5.7 1.5 1 2.3.5l1.6-1.1c.7-.4 1-1.3.6-2l-1.1-2.3c-.3-.7-1.1-1-1.8-.7l-1 .4C10.8 8.7 9.3 7.2 8 5.9l.4-1c.3-.7 0-1.5-.7-1.8L5.3 2.1z"/></svg></div>
-            <span id="d-phone">+82  10-8276-2287</span>
+            <div class="icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span id="d-phone">+82 10-8276-2287</span>
           </div>
         </div>
         <div class="contact-row">
-          <div class="icon"><svg viewBox="0 0 20 20"><path d="M10 1C6.1 1 3 4.1 3 8c0 5.2 7 11 7 11s7-5.8 7-11c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S8.6 5.5 10 5.5s2.5 1.1 2.5 2.5S11.4 10.5 10 10.5z"/></svg></div>
+          <div class="icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="9" r="2.5" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
           <span id="d-addr">경기도 고양시 덕양구 청초로 10, 덕은지엘메트로시티 지식산업센터 AA 1505호</span>
         </div>
       </div>
     </div>
   </div>
-
   <button class="btn" onclick="openSavePage()">✉️ 이메일 서명 추출하기</button>
 </div>
 
-<!-- PNG 저장 페이지 -->
 <div class="save-page" id="save-page">
   <div class="card" id="card-save">
     <div class="card-logo">
@@ -251,16 +257,30 @@ body {
       <div class="info-contacts">
         <div class="contact-inline">
           <div class="contact-row">
-            <div class="icon"><svg viewBox="0 0 20 16"><path d="M0 0h20v16H0V0zm1 1.5V15h18V1.5L10 9 1 1.5zM1.8 1L10 8.2 18.2 1H1.8z"/></svg></div>
+            <div class="icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="20" height="16" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                <polyline points="2,4 12,14 22,4" stroke="white" stroke-width="2" fill="none" stroke-linejoin="round"/>
+              </svg>
+            </div>
             <span id="s-email"></span>
           </div>
           <div class="contact-row">
-            <div class="icon"><svg viewBox="0 0 20 20"><path d="M5.3 2.1c-.7-.4-1.6-.1-2 .6L2.1 4.3c-.5.8-.2 1.8.5 2.3 1.5 1 3.1 2.4 4.6 3.9 1.5 1.5 2.9 3.1 3.9 4.6.5.7 1.5 1 2.3.5l1.6-1.1c.7-.4 1-1.3.6-2l-1.1-2.3c-.3-.7-1.1-1-1.8-.7l-1 .4C10.8 8.7 9.3 7.2 8 5.9l.4-1c.3-.7 0-1.5-.7-1.8L5.3 2.1z"/></svg></div>
+            <div class="icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
             <span id="s-phone"></span>
           </div>
         </div>
         <div class="contact-row">
-          <div class="icon"><svg viewBox="0 0 20 20"><path d="M10 1C6.1 1 3 4.1 3 8c0 5.2 7 11 7 11s7-5.8 7-11c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S8.6 5.5 10 5.5s2.5 1.1 2.5 2.5S11.4 10.5 10 10.5z"/></svg></div>
+          <div class="icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="9" r="2.5" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
           <span id="s-addr"></span>
         </div>
       </div>
