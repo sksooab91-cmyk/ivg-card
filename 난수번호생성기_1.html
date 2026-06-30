@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>난수번호 생성기</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
+    background: #f5f5f3;
+    margin: 0;
+    padding: 40px 16px;
+    color: #2c2c2a;
+  }
+  .card {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 24px;
+    text-align: center;
+  }
+  .row3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .row1 {
+    margin-bottom: 24px;
+  }
+  label {
+    font-size: 13px;
+    color: #6b6a66;
+    display: block;
+    margin-bottom: 6px;
+  }
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    text-transform: uppercase;
+    outline: none;
+  }
+  input[type="text"]:focus, input[type="number"]:focus {
+    border-color: #888;
+  }
+  .preview-prefix {
+    text-align: center;
+    font-size: 13px;
+    color: #6b6a66;
+    margin-bottom: 24px;
+    padding: 10px;
+    background: #f5f5f3;
+    border-radius: 8px;
+    font-family: "SF Mono", Consolas, monospace;
+  }
+  .preview-prefix strong {
+    color: #2c2c2a;
+    font-size: 15px;
+  }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  button {
+    flex: 1;
+    height: 44px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    background: #fff;
+    transition: background 0.15s;
+  }
+  button:hover { background: #f5f5f3; }
+  button:active { transform: scale(0.98); }
+  #generateBtn {
+    background: #2c2c2a;
+    color: #fff;
+    border: none;
+  }
+  #generateBtn:hover { background: #444441; }
+  #downloadBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .status {
+    display: none;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .status.success { background: #eaf3de; color: #27500a; }
+  .status.error { background: #fcebeb; color: #791f1f; }
+  .preview {
+    display: none;
+  }
+  .preview p {
+    font-size: 13px;
+    color: #6b6a66;
+    margin: 0 0 8px;
+  }
+  .preview-box {
+    background: #f5f5f3;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: "SF Mono", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    word-break: break-all;
+  }
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa9a0;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>난수번호 생성기</h1>
+
+  <div class="row3">
+    <div>
+      <label for="product">제품명</label>
+      <input type="text" id="product" value="BWP" placeholder="BWP">
+    </div>
+    <div>
+      <label for="year">해당년도</label>
+      <input type="text" id="year" value="2026" placeholder="2026" maxlength="4">
+    </div>
+    <div>
+      <label for="round">회차</label>
+      <input type="number" id="round" value="1" min="1" placeholder="1">
+    </div>
+  </div>
+
+  <div class="preview-prefix">
+    앞자리 고정 번호 미리보기: <strong id="prefixPreview">BWP262</strong>
+  </div>
+
+  <div class="row1">
+    <label for="count">생성 개수</label>
+    <input type="number" id="count" value="10000" min="1" max="500000">
+  </div>
+
+  <div class="btn-row">
+    <button id="generateBtn">난수번호 생성</button>
+    <button id="downloadBtn" disabled>엑셀 다운로드</button>
+  </div>
+
+  <div id="statusBox" class="status"></div>
+
+  <div id="previewWrap" class="preview">
+    <p>미리보기 (처음 10개)</p>
+    <div class="preview-box" id="previewList"></div>
+  </div>
+
+  <div class="footer-note">뒷자리 5자리 · 0/O 제외 · 숫자+영문 혼합 필수 · 중복 없음</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+let generatedCodes = [];
+
+const LENGTH = 5;
+const EXCLUDE = ['0', 'O'];
+
+function buildPrefix() {
+  const product = document.getElementById('product').value.trim().toUpperCase();
+  const year = document.getElementById('year').value.trim();
+  const round = document.getElementById('round').value.trim();
+  const yearShort = year.length >= 2 ? year.slice(-2) : year;
+  return product + yearShort + round;
+}
+
+function updatePrefixPreview() {
+  const prefix = buildPrefix();
+  document.getElementById('prefixPreview').textContent = prefix || '-';
+}
+
+function generateCodes() {
+  const statusBox = document.getElementById('statusBox');
+  statusBox.style.display = 'none';
+  statusBox.className = 'status';
+
+  const prefix = buildPrefix();
+  const count = parseInt(document.getElementById('count').value);
+
+  if (!prefix) {
+    showStatus('제품명, 해당년도, 회차를 모두 입력하세요.', 'error');
+    return;
+  }
+  if (!count || count < 1) {
+    showStatus('생성 개수를 올바르게 입력하세요.', 'error');
+    return;
+  }
+
+  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const allDigits = '0123456789';
+  const letters = allLetters.split('').filter(c => !EXCLUDE.includes(c));
+  const digits = allDigits.split('').filter(c => !EXCLUDE.includes(c));
+  const pool = letters.concat(digits);
+
+  const maxPossible = Math.pow(pool.length, LENGTH);
+  if (count > maxPossible * 0.9) {
+    showStatus('요청한 개수가 너무 많습니다. 5자리 조건으로는 최대 약 ' + Math.floor(maxPossible * 0.9).toLocaleString() + '개까지 생성 가능합니다.', 'error');
+    return;
+  }
+
+  const results = new Set();
+  let attempts = 0;
+  const maxAttempts = count * 200 + 1000000;
+
+  while (results.size < count && attempts < maxAttempts) {
+    attempts++;
+    let code = '';
+    for (let i = 0; i < LENGTH; i++) {
+      code += pool[Math.floor(Math.random() * pool.length)];
+    }
+    const hasDigit = /[0-9]/.test(code);
+    const hasAlpha = /[A-Z]/.test(code);
+    if (!hasDigit || !hasAlpha) continue;
+    results.add(code);
+  }
+
+  if (results.size < count) {
+    showStatus('코드를 충분히 생성하지 못했습니다. 개수를 줄이고 다시 시도해주세요.', 'error');
+    return;
+  }
+
+  const finalList = Array.from(results).sort();
+  generatedCodes = finalList.map(c => prefix + c);
+
+  showStatus('생성 완료: ' + generatedCodes.length.toLocaleString() + '개 (중복 없음)', 'success');
+
+  const previewWrap = document.getElementById('previewWrap');
+  const previewList = document.getElementById('previewList');
+  previewList.textContent = generatedCodes.slice(0, 10).join('  ·  ');
+  previewWrap.style.display = 'block';
+
+  document.getElementById('downloadBtn').disabled = false;
+}
+
+function showStatus(msg, type) {
+  const statusBox = document.getElementById('statusBox');
+  statusBox.textContent = msg;
+  statusBox.className = 'status ' + type;
+  statusBox.style.display = 'block';
+}
+
+function downloadExcel() {
+  if (generatedCodes.length === 0) return;
+
+  const wb = XLSX.utils.book_new();
+  const wsData = [['번호', '코드']];
+  generatedCodes.forEach((code, i) => {
+    wsData.push([i + 1, code]);
+  });
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  ws['!cols'] = [{ wch: 10 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, ws, '난수코드');
+
+  const prefix = buildPrefix() || 'CODE';
+  XLSX.writeFile(wb, prefix + '_난수번호_' + generatedCodes.length + '.xlsx');
+}
+
+document.getElementById('product').addEventListener('input', updatePrefixPreview);
+document.getElementById('year').addEventListener('input', updatePrefixPreview);
+document.getElementById('round').addEventListener('input', updatePrefixPreview);
+document.getElementById('generateBtn').addEventListener('click', generateCodes);
+document.getElementById('downloadBtn').addEventListener('click', downloadExcel);
+
+updatePrefixPreview();
+</script>
+
+</body>
+</html>
