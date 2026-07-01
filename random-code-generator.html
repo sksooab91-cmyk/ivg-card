@@ -8,23 +8,24 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --bg: #faf7f4;
+    --bg: #f5f1e8;
+    --bg-warm: #ede8dc;
     --surface: #ffffff;
-    --surface-2: #fdf5ef;
-    --border: #eed9c8;
-    --border-strong: #ddb fa0;
-    --text-1: #1e150d;
-    --text-2: #6b4c35;
-    --text-3: #b08a72;
-    --accent: #e8610a;
-    --accent-hover: #cf5208;
-    --accent-bg: #fef0e6;
-    --accent-text: #a03d00;
-    --accent-border: #f5c49a;
+    --surface-2: #f9f7f2;
+    --border: #e2ddd2;
+    --border-strong: #cdc7b8;
+    --text-1: #0d1a3a;
+    --text-2: #3a4e7a;
+    --text-3: #9096ae;
+    --accent: #1b3fab;
+    --accent-hover: #153390;
+    --accent-bg: #edf1fc;
+    --accent-text: #1b3fab;
+    --accent-border: #b8c8f0;
     --success: #1a7f4b;
     --success-bg: #e6f5ee;
     --warning: #7a5400;
-    --warning-bg: #fff4d6;
+    --warning-bg: #fff8e6;
     --danger: #c0392b;
     --danger-bg: #fdf0ef;
     --radius-sm: 6px;
@@ -41,10 +42,10 @@
   }
 
   .topbar {
-    background: var(--accent);
-    border-bottom: 1px solid var(--accent-hover);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     padding: 0 28px;
-    height: 54px;
+    height: 58px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -52,54 +53,59 @@
     top: 0;
     z-index: 100;
   }
-  .topbar-left { display: flex; align-items: center; gap: 10px; }
-  .topbar-icon {
-    width: 30px; height: 30px; border-radius: 8px;
-    background: rgba(255,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
+  .topbar-left { display: flex; align-items: center; gap: 16px; }
+  .topbar-logo img {
+    height: 26px;
+    display: block;
   }
-  .topbar h1 { font-size: 15px; font-weight: 600; color: #fff; }
+  .topbar-divider {
+    width: 1px; height: 22px;
+    background: var(--border-strong);
+  }
+  .topbar h1 {
+    font-size: 13px; font-weight: 600;
+    color: var(--text-2);
+    letter-spacing: 0.01em;
+  }
   .topbar-right { display: flex; align-items: center; gap: 8px; }
   .db-badge {
     display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: rgba(255,255,255,0.85);
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
+    font-size: 12px; color: var(--text-3);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
     border-radius: 20px;
     padding: 4px 14px;
   }
-  .db-dot { width: 7px; height: 7px; border-radius: 50%; background: #7dffb3; }
+  .db-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; flex-shrink:0; }
 
   .layout {
     display: grid;
     grid-template-columns: 340px 1fr;
-    gap: 0;
-    height: calc(100vh - 54px);
+    height: calc(100vh - 58px);
   }
 
   .sidebar {
     background: var(--surface);
     border-right: 1px solid var(--border);
     overflow-y: auto;
-    padding: 20px;
+    padding: 22px 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
   }
 
   .main {
     overflow-y: auto;
-    padding: 24px 28px;
+    padding: 26px 30px;
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
   .section-title {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     color: var(--text-3);
     margin-bottom: 10px;
@@ -123,7 +129,7 @@
     width: 100%;
     height: 38px;
     padding: 0 12px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
     font-size: 14px;
     background: var(--surface);
@@ -133,22 +139,30 @@
   }
   select:focus, input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(232,97,10,0.12);
+    box-shadow: 0 0 0 3px rgba(27,63,171,0.1);
   }
 
   .field-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .field-full { margin-bottom: 12px; }
+  .field-full { margin-bottom: 14px; }
 
   .preview-box {
-    background: var(--accent-bg);
-    border: 1px solid var(--accent-border);
+    background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 14px 16px;
+    padding: 16px;
     text-align: center;
     margin: 14px 0;
   }
-  .preview-box .label { font-size: 11px; color: var(--accent-text); margin-bottom: 6px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
-  .preview-code { font-size: 24px; font-weight: 700; font-family: "SF Mono", "Consolas", monospace; color: var(--accent); letter-spacing: 2px; }
+  .preview-box .label {
+    font-size: 10px; color: var(--text-3);
+    margin-bottom: 7px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .preview-code {
+    font-size: 23px; font-weight: 700;
+    font-family: "SF Mono", "Consolas", monospace;
+    color: var(--accent); letter-spacing: 2px;
+  }
 
   .warn-box {
     display: none;
@@ -165,8 +179,8 @@
   .btn {
     display: flex; align-items: center; justify-content: center;
     gap: 7px; height: 40px; border-radius: var(--radius-sm);
-    font-size: 14px; font-weight: 500; cursor: pointer;
-    border: 1px solid var(--border);
+    font-size: 13px; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border-strong);
     background: var(--surface);
     color: var(--text-1);
     transition: background 0.12s, transform 0.1s;
@@ -189,17 +203,17 @@
 
   .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .stat-box {
-    background: var(--surface-2);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 12px 14px;
   }
-  .stat-box .s-label { font-size: 11px; color: var(--text-3); margin-bottom: 4px; font-weight: 500; }
+  .stat-box .s-label { font-size: 11px; color: var(--text-3); margin-bottom: 5px; font-weight: 500; }
   .stat-box .s-val { font-size: 22px; font-weight: 700; color: var(--text-1); }
 
   .history-item {
     display: flex; align-items: center; justify-content: space-between;
-    background: var(--surface-2);
+    background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 9px 12px;
@@ -219,7 +233,6 @@
     padding: 11px 14px;
     border-radius: var(--radius-sm);
     font-size: 13px;
-    margin-bottom: 4px;
     line-height: 1.5;
   }
   .status-box.success { background: var(--success-bg); color: var(--success); border: 1px solid #a8dfc0; }
@@ -228,47 +241,49 @@
 
   .table-header-row {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
-  .t-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
-  .t-count { font-size: 13px; color: var(--text-3); margin-left: 7px; }
-  .search-input { width: 210px !important; height: 36px !important; font-size: 13px !important; }
+  .t-title { font-size: 16px; font-weight: 700; color: var(--text-1); }
+  .t-count { font-size: 13px; color: var(--text-3); margin-left: 8px; }
+  .search-input { width: 220px !important; height: 36px !important; font-size: 13px !important; }
 
   .table-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-  .table-head { background: var(--surface-2); border-bottom: 1px solid var(--border); }
+  .table-head { background: var(--accent); }
   .table-head table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   .table-head th {
-    padding: 10px 14px; text-align: left;
+    padding: 10px 16px; text-align: left;
     font-size: 11px; font-weight: 700;
-    color: var(--text-2); letter-spacing: 0.05em; text-transform: uppercase;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.07em; text-transform: uppercase;
   }
-  .table-body { max-height: calc(100vh - 280px); overflow-y: auto; background: var(--surface); }
+  .table-body { max-height: calc(100vh - 270px); overflow-y: auto; background: var(--surface); }
   .table-body table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-  .table-body tr { transition: background 0.1s; }
   .table-body tr:hover td { background: var(--surface-2); }
-  .table-body td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .table-body td { padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
   .table-body tr:last-child td { border-bottom: none; }
   .td-num { color: var(--text-3); font-size: 12px; }
-  .td-code { font-family: "SF Mono", Consolas, monospace; font-size: 13px; font-weight: 500; color: var(--text-1); }
+  .td-code { font-family: "SF Mono", Consolas, monospace; font-weight: 500; color: var(--text-1); }
   .td-date { font-size: 12px; color: var(--text-3); }
 
-  .empty-state { text-align: center; padding: 64px 20px; color: var(--text-3); }
-  .empty-state .e-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.35; }
+  .empty-state { text-align: center; padding: 72px 20px; color: var(--text-3); }
+  .empty-state .e-icon { font-size: 44px; margin-bottom: 14px; opacity: 0.3; }
   .empty-state .e-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text-2); }
   .empty-state .e-sub { font-size: 13px; }
 
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+  ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 10px; }
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-left">
-    <div class="topbar-icon">🔑</div>
-    <h1>IVG 난수번호 생성기</h1>
+    <div class="topbar-logo">
+      <img src="data:image/png;base64,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" alt="baby brezza">
+    </div>
+    <div class="topbar-divider"></div>
+    <h1>난수번호 생성기</h1>
   </div>
   <div class="topbar-right">
     <div class="db-badge">
@@ -281,7 +296,6 @@
 <div class="layout">
 
   <div class="sidebar">
-
     <div>
       <p class="section-title">코드 생성 설정</p>
       <div class="card">
@@ -343,7 +357,6 @@
         <p style="font-size:13px;color:var(--text-3);text-align:center;padding:20px 0">저장된 이력이 없습니다</p>
       </div>
     </div>
-
   </div>
 
   <div class="main">
@@ -359,12 +372,8 @@
       <div class="table-wrap">
         <div class="table-head">
           <table>
-            <colgroup><col style="width:56px"><col><col style="width:110px"></colgroup>
-            <tr>
-              <th>No.</th>
-              <th>코드</th>
-              <th>생성일</th>
-            </tr>
+            <colgroup><col style="width:60px"><col><col style="width:112px"></colgroup>
+            <tr><th>No.</th><th>코드</th><th>생성일</th></tr>
           </table>
         </div>
         <div class="table-body" id="tableBody">
@@ -377,187 +386,162 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const DB_KEY = 'ivg_code_db_v2';
-let currentCodes = [], currentDate = '';
+const DB_KEY = "ivg_code_db_v2";
+let currentCodes = [], currentDate = "";
 
 function today() {
   const d = new Date();
-  return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+  return d.getFullYear() + "." + String(d.getMonth()+1).padStart(2,"0") + "." + String(d.getDate()).padStart(2,"0");
 }
 
-const yearSel = document.getElementById('year');
+const yearSel = document.getElementById("year");
 const thisYear = new Date().getFullYear();
 for (let y = thisYear; y <= 2050; y++) {
-  const o = document.createElement('option');
-  o.value = String(y); o.textContent = y + '년';
+  const o = document.createElement("option");
+  o.value = String(y); o.textContent = y + "년";
   if (y === thisYear) o.selected = true;
   yearSel.appendChild(o);
 }
 
-function loadDB() { try { return JSON.parse(localStorage.getItem(DB_KEY)||'[]'); } catch { return []; } }
+function loadDB() { try { return JSON.parse(localStorage.getItem(DB_KEY)||"[]"); } catch { return []; } }
 function saveDB(db) { try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch {} }
 function getAllCodesSet() {
   const s = new Set();
   loadDB().forEach(e => e.codes.forEach(c => s.add(c)));
   return s;
 }
-
 function buildPrefix() {
-  return document.getElementById('product').value +
-    document.getElementById('year').value.slice(-2) +
-    document.getElementById('round').value.trim();
+  return document.getElementById("product").value +
+    document.getElementById("year").value.slice(-2) +
+    document.getElementById("round").value.trim();
 }
-
 function updatePreview() {
-  document.getElementById('prefixPreview').textContent = (buildPrefix()||'-') + 'XXXXX';
+  document.getElementById("prefixPreview").textContent = (buildPrefix()||"-") + "XXXXX";
   checkWarn();
 }
-
 function checkWarn() {
   const db = loadDB();
-  const product = document.getElementById('product').value;
-  const ys = document.getElementById('year').value.slice(-2);
-  const round = parseInt(document.getElementById('round').value);
+  const product = document.getElementById("product").value;
+  const ys = document.getElementById("year").value.slice(-2);
+  const round = parseInt(document.getElementById("round").value);
   const prefix = buildPrefix();
-  const warn = document.getElementById('dupWarning');
+  const warn = document.getElementById("dupWarning");
   const existing = db.find(e => e.prefix === prefix);
   if (existing) {
-    warn.style.display = 'block';
-    warn.innerHTML = '⚠️ <strong>' + prefix + '</strong>는 ' + existing.date + '에 이미 ' + existing.codes.length.toLocaleString() + '개 생성된 이력이 있습니다.';
+    warn.style.display = "block";
+    warn.innerHTML = "⚠️ <strong>" + prefix + "</strong>는 " + existing.date + "에 이미 " + existing.codes.length.toLocaleString() + "개 생성된 이력이 있습니다.";
   } else {
     const maxR = db.filter(e=>e.product===product&&e.year===ys).map(e=>e.round).sort((a,b)=>b-a)[0]||0;
     if (maxR > 0 && round < maxR) {
-      warn.style.display = 'block';
-      warn.innerHTML = '⚠️ <strong>' + product + ' ' + ys + '년형</strong>은 ' + maxR + '회차까지 작업됐습니다. ' + round + '회차는 이미 지난 회차입니다.';
-    } else {
-      warn.style.display = 'none';
-    }
+      warn.style.display = "block";
+      warn.innerHTML = "⚠️ <strong>" + product + " " + ys + "년형</strong>은 " + maxR + "회차까지 작업됐습니다. " + round + "회차는 이미 지난 회차입니다.";
+    } else { warn.style.display = "none"; }
   }
 }
-
 function renderHistory() {
   const db = loadDB();
   const total = db.reduce((s,e)=>s+e.codes.length,0);
-  document.getElementById('statTotal').textContent = total.toLocaleString();
-  document.getElementById('dbBadgeCount').textContent = total.toLocaleString();
-  const el = document.getElementById('historyList');
-  if (!db.length) { el.innerHTML='<p style="font-size:13px;color:var(--text-3);text-align:center;padding:20px 0">저장된 이력이 없습니다</p>'; return; }
+  document.getElementById("statTotal").textContent = total.toLocaleString();
+  document.getElementById("dbBadgeCount").textContent = total.toLocaleString();
+  const el = document.getElementById("historyList");
+  if (!db.length) { el.innerHTML="<p style=\"font-size:13px;color:var(--text-3);text-align:center;padding:20px 0\">저장된 이력이 없습니다</p>"; return; }
   el.innerHTML = db.slice().reverse().map(e=>
-    '<div class="history-item"><div><p class="hi-prefix">'+e.prefix+'</p><p class="hi-meta">'+e.codes.length.toLocaleString()+'개 · '+e.date+'</p></div>' +
-    '<button class="hi-del" onclick="delEntry(\''+e.prefix+'\')">✕</button></div>'
-  ).join('');
+    "<div class=\"history-item\"><div><p class=\"hi-prefix\">"+e.prefix+"</p><p class=\"hi-meta\">"+e.codes.length.toLocaleString()+"개 · "+e.date+"</p></div>" +
+    "<button class=\"hi-del\" onclick=\"delEntry('"+e.prefix+"')\" >✕</button></div>"
+  ).join("");
 }
-
 function delEntry(prefix) {
-  if (!confirm(prefix+' 이력을 삭제할까요?')) return;
+  if (!confirm(prefix+" 이력을 삭제할까요?")) return;
   saveDB(loadDB().filter(e=>e.prefix!==prefix));
-  renderHistory();
-  showStatus(prefix+' 이력이 삭제되었습니다.','warning');
+  renderHistory(); showStatus(prefix+" 이력이 삭제되었습니다.","warning");
 }
-
 function showStatus(msg, type) {
-  const box = document.getElementById('statusBox');
-  box.innerHTML=msg; box.className='status-box '+type; box.style.display='block';
+  const box = document.getElementById("statusBox");
+  box.innerHTML=msg; box.className="status-box "+type; box.style.display="block";
 }
-
 function renderTable(codes, date) {
   const d = date||currentDate||today();
-  document.getElementById('listCount').textContent = codes.length.toLocaleString()+'개';
-  const body = document.getElementById('tableBody');
-  if (!codes.length) {
-    body.innerHTML='<div class="empty-state"><div class="e-icon">🔍</div><p class="e-title">검색 결과가 없습니다</p></div>';
-    return;
-  }
-  let html = '<table style="width:100%;border-collapse:collapse;table-layout:fixed"><colgroup><col style="width:56px"><col><col style="width:110px"></colgroup>';
+  document.getElementById("listCount").textContent = codes.length.toLocaleString()+"개";
+  const body = document.getElementById("tableBody");
+  if (!codes.length) { body.innerHTML="<div class=\"empty-state\"><div class=\"e-icon\">🔍</div><p class=\"e-title\">검색 결과가 없습니다</p></div>"; return; }
+  let html = "<table style=\"width:100%;border-collapse:collapse;table-layout:fixed\"><colgroup><col style=\"width:60px\"><col><col style=\"width:112px\"></colgroup>";
   codes.slice(0,500).forEach((code,i)=>{
-    html += '<tr><td class="td-num" style="padding:10px 14px;border-bottom:1px solid var(--border)">'+(i+1)+'</td>' +
-      '<td class="td-code" style="padding:10px 14px;border-bottom:1px solid var(--border);font-family:monospace;font-weight:500">'+code+'</td>' +
-      '<td class="td-date" style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-3)">'+d+'</td></tr>';
+    html += "<tr><td class=\"td-num\" style=\"padding:10px 16px;border-bottom:1px solid var(--border)\">"+(i+1)+"</td>" +
+      "<td class=\"td-code\" style=\"padding:10px 16px;border-bottom:1px solid var(--border);font-family:monospace;font-weight:500\">"+code+"</td>" +
+      "<td class=\"td-date\" style=\"padding:10px 16px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-3)\">"+d+"</td></tr>";
   });
-  html += '</table>';
-  if (codes.length>500) html += '<div style="text-align:center;padding:14px;font-size:13px;color:var(--text-3)">외 '+(codes.length-500).toLocaleString()+'개 · 엑셀에서 전체 확인</div>';
+  html += "</table>";
+  if (codes.length>500) html += "<div style=\"text-align:center;padding:14px;font-size:13px;color:var(--text-3)\">외 "+(codes.length-500).toLocaleString()+"개 · 엑셀에서 전체 확인</div>";
   body.innerHTML = html;
 }
-
 function generateCodes() {
-  document.getElementById('statusBox').style.display='none';
-  const prefix=buildPrefix(), count=parseInt(document.getElementById('count').value);
-  if (!prefix||prefix.length<2) { showStatus('모든 항목을 입력하세요.','error'); return; }
-  if (!count||count<1) { showStatus('생성 개수를 올바르게 입력하세요.','error'); return; }
-
+  document.getElementById("statusBox").style.display="none";
+  const prefix=buildPrefix(), count=parseInt(document.getElementById("count").value);
+  if (!prefix||prefix.length<2) { showStatus("모든 항목을 입력하세요.","error"); return; }
+  if (!count||count<1) { showStatus("생성 개수를 올바르게 입력하세요.","error"); return; }
   const allInDB=getAllCodesSet();
-  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(c=>c!=='O');
-  const digits='123456789'.split('');
+  const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").filter(c=>c!=="O");
+  const digits="123456789".split("");
   const pool=letters.concat(digits);
-
-  if (count>Math.pow(pool.length,5)*0.9) { showStatus('요청 개수가 너무 많습니다.','error'); return; }
-
+  if (count>Math.pow(pool.length,5)*0.9) { showStatus("요청 개수가 너무 많습니다.","error"); return; }
   const results=new Set();
   let att=0;
   while (results.size<count&&att<count*300+1000000) {
     att++;
-    let code='';
+    let code="";
     for (let i=0;i<5;i++) code+=pool[Math.floor(Math.random()*pool.length)];
     if (!/[0-9]/.test(code)||!/[A-Z]/.test(code)) continue;
     const full=prefix+code;
     if (!allInDB.has(full)) results.add(full);
   }
-
-  if (results.size<count) { showStatus('DB 중복 제거 후 '+results.size.toLocaleString()+'개만 생성됩니다. 개수를 줄이거나 회차를 높여주세요.','error'); return; }
-
+  if (results.size<count) { showStatus("DB 중복 제거 후 "+results.size.toLocaleString()+"개만 생성됩니다.","error"); return; }
   currentDate=today();
   currentCodes=Array.from(results).sort();
-
   const db=loadDB();
   const ex=db.find(e=>e.prefix===prefix);
   if (ex) { ex.codes=[...new Set([...ex.codes,...currentCodes])]; ex.date=currentDate; }
-  else db.push({prefix, product:document.getElementById('product').value, year:document.getElementById('year').value.slice(-2), round:parseInt(document.getElementById('round').value), codes:currentCodes, date:currentDate});
+  else db.push({prefix, product:document.getElementById("product").value, year:document.getElementById("year").value.slice(-2), round:parseInt(document.getElementById("round").value), codes:currentCodes, date:currentDate});
   saveDB(db);
-
-  document.getElementById('statNow').textContent=currentCodes.length.toLocaleString();
-  document.getElementById('statDup').textContent='없음';
+  document.getElementById("statNow").textContent=currentCodes.length.toLocaleString();
+  document.getElementById("statDup").textContent="없음";
   renderHistory(); renderTable(currentCodes,currentDate); checkWarn();
-  showStatus('✅ '+currentCodes.length.toLocaleString()+'개 생성 완료 · '+currentDate+' · DB 저장됨','success');
-  document.getElementById('downloadBtn').disabled=false;
-  document.getElementById('copyBtn').disabled=false;
+  showStatus("✅ "+currentCodes.length.toLocaleString()+"개 생성 완료 · "+currentDate+" · DB 저장됨","success");
+  document.getElementById("downloadBtn").disabled=false;
+  document.getElementById("copyBtn").disabled=false;
 }
-
 function downloadExcel() {
   if (!currentCodes.length) return;
   const wb=XLSX.utils.book_new();
-  const ws=XLSX.utils.aoa_to_sheet([['번호','코드','생성일'],...currentCodes.map((c,i)=>[i+1,c,currentDate])]);
-  ws['!cols']=[{wch:8},{wch:20},{wch:14}];
-  XLSX.utils.book_append_sheet(wb,ws,'난수코드');
-  const b64=XLSX.write(wb,{bookType:'xlsx',type:'base64'});
-  const a=document.createElement('a');
-  a.href='data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'+b64;
-  a.download=buildPrefix()+'_난수번호_'+currentCodes.length+'_'+currentDate.replace(/\./g,'')+'.xlsx';
-  a.target='_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  const ws=XLSX.utils.aoa_to_sheet([["번호","코드","생성일"],...currentCodes.map((c,i)=>[i+1,c,currentDate])]);
+  ws["!cols"]=[{wch:8},{wch:20},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws,"난수코드");
+  const b64=XLSX.write(wb,{bookType:"xlsx",type:"base64"});
+  const a=document.createElement("a");
+  a.href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,"+b64;
+  a.download=buildPrefix()+"_난수번호_"+currentCodes.length+"_"+currentDate.replace(/\./g,"")+".xlsx";
+  a.target="_blank"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
-
-document.getElementById('product').addEventListener('change',updatePreview);
-document.getElementById('year').addEventListener('change',updatePreview);
-document.getElementById('round').addEventListener('input',updatePreview);
-document.getElementById('generateBtn').addEventListener('click',generateCodes);
-document.getElementById('downloadBtn').addEventListener('click',downloadExcel);
-document.getElementById('copyBtn').addEventListener('click',()=>{
+document.getElementById("product").addEventListener("change",updatePreview);
+document.getElementById("year").addEventListener("change",updatePreview);
+document.getElementById("round").addEventListener("input",updatePreview);
+document.getElementById("generateBtn").addEventListener("click",generateCodes);
+document.getElementById("downloadBtn").addEventListener("click",downloadExcel);
+document.getElementById("copyBtn").addEventListener("click",()=>{
   if (!currentCodes.length) return;
-  navigator.clipboard.writeText(currentCodes.join('\n')).then(()=>showStatus('클립보드에 복사되었습니다.','success'));
+  navigator.clipboard.writeText(currentCodes.join("\n")).then(()=>showStatus("클립보드에 복사되었습니다.","success"));
 });
-document.getElementById('clearDbBtn').addEventListener('click',()=>{
-  if (!confirm('전체 DB를 초기화할까요? 되돌릴 수 없습니다.')) return;
-  saveDB([]); renderHistory(); showStatus('DB가 초기화되었습니다.','warning');
+document.getElementById("clearDbBtn").addEventListener("click",()=>{
+  if (!confirm("전체 DB를 초기화할까요?")) return;
+  saveDB([]); renderHistory(); showStatus("DB가 초기화되었습니다.","warning");
 });
-document.getElementById('searchBox').addEventListener('input',e=>{
+document.getElementById("searchBox").addEventListener("input",e=>{
   const q=e.target.value.trim().toUpperCase();
   renderTable(q?currentCodes.filter(c=>c.includes(q)):currentCodes,currentDate);
 });
-
 updatePreview();
 renderHistory();
 </script>
