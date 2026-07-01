@@ -3,292 +3,563 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>난수번호 생성기</title>
+<title>IVG 난수번호 생성기</title>
 <style>
-  * { box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #faf7f4;
+    --surface: #ffffff;
+    --surface-2: #fdf5ef;
+    --border: #eed9c8;
+    --border-strong: #ddb fa0;
+    --text-1: #1e150d;
+    --text-2: #6b4c35;
+    --text-3: #b08a72;
+    --accent: #e8610a;
+    --accent-hover: #cf5208;
+    --accent-bg: #fef0e6;
+    --accent-text: #a03d00;
+    --accent-border: #f5c49a;
+    --success: #1a7f4b;
+    --success-bg: #e6f5ee;
+    --warning: #7a5400;
+    --warning-bg: #fff4d6;
+    --danger: #c0392b;
+    --danger-bg: #fdf0ef;
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", sans-serif;
-    background: #f5f5f3;
-    margin: 0;
-    padding: 40px 16px;
-    color: #2c2c2a;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-1);
+    min-height: 100vh;
+    font-size: 14px;
   }
-  .card {
-    max-width: 480px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 32px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+
+  .topbar {
+    background: var(--accent);
+    border-bottom: 1px solid var(--accent-hover);
+    padding: 0 28px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
-  h1 {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0 0 24px;
-    text-align: center;
+  .topbar-left { display: flex; align-items: center; gap: 10px; }
+  .topbar-icon {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
   }
-  .row3 {
+  .topbar h1 { font-size: 15px; font-weight: 600; color: #fff; }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+  .db-badge {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 14px;
+  }
+  .db-dot { width: 7px; height: 7px; border-radius: 50%; background: #7dffb3; }
+
+  .layout {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 16px;
+    grid-template-columns: 340px 1fr;
+    gap: 0;
+    height: calc(100vh - 54px);
   }
-  .row1 {
-    margin-bottom: 24px;
+
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
+
+  .main {
+    overflow-y: auto;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 10px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 18px 18px 20px;
+  }
+
   label {
-    font-size: 13px;
-    color: #6b6a66;
     display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+    margin-bottom: 5px;
+  }
+  select, input[type="number"], input[type="text"] {
+    width: 100%;
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--surface);
+    color: var(--text-1);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  select:focus, input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232,97,10,0.12);
+  }
+
+  .field-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .field-full { margin-bottom: 12px; }
+
+  .preview-box {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    text-align: center;
+    margin: 14px 0;
+  }
+  .preview-box .label { font-size: 11px; color: var(--accent-text); margin-bottom: 6px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
+  .preview-code { font-size: 24px; font-weight: 700; font-family: "SF Mono", "Consolas", monospace; color: var(--accent); letter-spacing: 2px; }
+
+  .warn-box {
+    display: none;
+    background: var(--warning-bg);
+    border: 1px solid #f0d070;
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--warning);
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+
+  .btn {
+    display: flex; align-items: center; justify-content: center;
+    gap: 7px; height: 40px; border-radius: var(--radius-sm);
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-1);
+    transition: background 0.12s, transform 0.1s;
+    width: 100%;
+  }
+  .btn:hover { background: var(--surface-2); }
+  .btn:active { transform: scale(0.98); }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent);
+    font-weight: 600; height: 46px; font-size: 15px;
+    border-radius: var(--radius);
+  }
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #f0b9b5; }
+  .btn-danger:hover { background: #fae0de; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .stat-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .stat-box .s-label { font-size: 11px; color: var(--text-3); margin-bottom: 4px; font-weight: 500; }
+  .stat-box .s-val { font-size: 22px; font-weight: 700; color: var(--text-1); }
+
+  .history-item {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
     margin-bottom: 6px;
   }
-  input[type="text"], input[type="number"] {
-    width: 100%;
-    height: 40px;
-    padding: 0 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 15px;
-    text-transform: uppercase;
-    outline: none;
+  .history-item .hi-prefix { font-size: 13px; font-weight: 700; font-family: monospace; color: var(--accent); }
+  .history-item .hi-meta { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+  .hi-del {
+    border: none; background: none; cursor: pointer;
+    color: var(--text-3); font-size: 15px; padding: 4px 6px;
+    border-radius: 4px; line-height: 1;
   }
-  input[type="text"]:focus, input[type="number"]:focus {
-    border-color: #888;
-  }
-  .preview-prefix {
-    text-align: center;
-    font-size: 13px;
-    color: #6b6a66;
-    margin-bottom: 24px;
-    padding: 10px;
-    background: #f5f5f3;
-    border-radius: 8px;
-    font-family: "SF Mono", Consolas, monospace;
-  }
-  .preview-prefix strong {
-    color: #2c2c2a;
-    font-size: 15px;
-  }
-  .btn-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  button {
-    flex: 1;
-    height: 44px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    border: 1px solid #ddd;
-    background: #fff;
-    transition: background 0.15s;
-  }
-  button:hover { background: #f5f5f3; }
-  button:active { transform: scale(0.98); }
-  #generateBtn {
-    background: #2c2c2a;
-    color: #fff;
-    border: none;
-  }
-  #generateBtn:hover { background: #444441; }
-  #downloadBtn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-  .status {
+  .hi-del:hover { color: var(--danger); background: var(--danger-bg); }
+
+  .status-box {
     display: none;
-    margin-bottom: 16px;
-    padding: 12px 14px;
-    border-radius: 8px;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
     font-size: 13px;
+    margin-bottom: 4px;
+    line-height: 1.5;
   }
-  .status.success { background: #eaf3de; color: #27500a; }
-  .status.error { background: #fcebeb; color: #791f1f; }
-  .preview {
-    display: none;
+  .status-box.success { background: var(--success-bg); color: var(--success); border: 1px solid #a8dfc0; }
+  .status-box.error { background: var(--danger-bg); color: var(--danger); border: 1px solid #f0b9b5; }
+  .status-box.warning { background: var(--warning-bg); color: var(--warning); border: 1px solid #f0d070; }
+
+  .table-header-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
   }
-  .preview p {
-    font-size: 13px;
-    color: #6b6a66;
-    margin: 0 0 8px;
+  .t-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
+  .t-count { font-size: 13px; color: var(--text-3); margin-left: 7px; }
+  .search-input { width: 210px !important; height: 36px !important; font-size: 13px !important; }
+
+  .table-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .table-head { background: var(--surface-2); border-bottom: 1px solid var(--border); }
+  .table-head table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .table-head th {
+    padding: 10px 14px; text-align: left;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-2); letter-spacing: 0.05em; text-transform: uppercase;
   }
-  .preview-box {
-    background: #f5f5f3;
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-family: "SF Mono", Consolas, monospace;
-    font-size: 13px;
-    line-height: 1.8;
-    word-break: break-all;
-  }
-  .footer-note {
-    text-align: center;
-    font-size: 12px;
-    color: #aaa9a0;
-    margin-top: 24px;
-  }
+  .table-body { max-height: calc(100vh - 280px); overflow-y: auto; background: var(--surface); }
+  .table-body table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .table-body tr { transition: background 0.1s; }
+  .table-body tr:hover td { background: var(--surface-2); }
+  .table-body td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .table-body tr:last-child td { border-bottom: none; }
+  .td-num { color: var(--text-3); font-size: 12px; }
+  .td-code { font-family: "SF Mono", Consolas, monospace; font-size: 13px; font-weight: 500; color: var(--text-1); }
+  .td-date { font-size: 12px; color: var(--text-3); }
+
+  .empty-state { text-align: center; padding: 64px 20px; color: var(--text-3); }
+  .empty-state .e-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.35; }
+  .empty-state .e-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--text-2); }
+  .empty-state .e-sub { font-size: 13px; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h1>난수번호 생성기</h1>
-
-  <div class="row3">
-    <div>
-      <label for="product">제품명</label>
-      <input type="text" id="product" value="BWP" placeholder="BWP">
-    </div>
-    <div>
-      <label for="year">해당년도</label>
-      <input type="text" id="year" value="2026" placeholder="2026" maxlength="4">
-    </div>
-    <div>
-      <label for="round">회차</label>
-      <input type="number" id="round" value="1" min="1" placeholder="1">
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-icon">🔑</div>
+    <h1>IVG 난수번호 생성기</h1>
+  </div>
+  <div class="topbar-right">
+    <div class="db-badge">
+      <span class="db-dot"></span>
+      DB 연결됨 &nbsp;·&nbsp; 누적 <strong id="dbBadgeCount">0</strong>개
     </div>
   </div>
+</div>
 
-  <div class="preview-prefix">
-    앞자리 고정 번호 미리보기: <strong id="prefixPreview">BWP262</strong>
+<div class="layout">
+
+  <div class="sidebar">
+
+    <div>
+      <p class="section-title">코드 생성 설정</p>
+      <div class="card">
+        <div class="field-grid-3">
+          <div>
+            <label>제품명</label>
+            <select id="product">
+              <option value="BWP">BWP</option>
+              <option value="FPA">FPA</option>
+              <option value="SQSD">SQSD</option>
+              <option value="FMD">FMD</option>
+            </select>
+          </div>
+          <div>
+            <label>해당년도</label>
+            <select id="year"></select>
+          </div>
+          <div>
+            <label>회차</label>
+            <input type="number" id="round" value="1" min="1">
+          </div>
+        </div>
+        <div class="field-full">
+          <label>생성 개수</label>
+          <input type="number" id="count" value="10000" min="1" max="500000">
+        </div>
+        <div class="preview-box">
+          <p class="label">생성될 코드 형식</p>
+          <p class="preview-code" id="prefixPreview">BWP26XXXXX</p>
+        </div>
+        <div class="warn-box" id="dupWarning"></div>
+        <button class="btn btn-primary" id="generateBtn">🪄&nbsp; 코드 생성</button>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-title">생성 현황</p>
+      <div class="stat-grid">
+        <div class="stat-box"><p class="s-label">이번 생성</p><p class="s-val" id="statNow">0</p></div>
+        <div class="stat-box"><p class="s-label">DB 누적</p><p class="s-val" id="statTotal">0</p></div>
+        <div class="stat-box"><p class="s-label">중복 감지</p><p class="s-val" id="statDup">-</p></div>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-title">내보내기</p>
+      <div class="btn-row">
+        <button class="btn" id="downloadBtn" disabled>📥 엑셀 다운로드</button>
+        <button class="btn" id="copyBtn" disabled>📋 복사</button>
+      </div>
+    </div>
+
+    <div style="flex:1">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <p class="section-title" style="margin-bottom:0">작업 이력 DB</p>
+        <button class="btn btn-danger" id="clearDbBtn" style="height:28px;font-size:11px;width:auto;padding:0 12px">전체 초기화</button>
+      </div>
+      <div id="historyList">
+        <p style="font-size:13px;color:var(--text-3);text-align:center;padding:20px 0">저장된 이력이 없습니다</p>
+      </div>
+    </div>
+
   </div>
 
-  <div class="row1">
-    <label for="count">생성 개수</label>
-    <input type="number" id="count" value="10000" min="1" max="500000">
+  <div class="main">
+    <div id="statusBox" class="status-box"></div>
+    <div>
+      <div class="table-header-row">
+        <div>
+          <span class="t-title">전체 코드 목록</span>
+          <span class="t-count" id="listCount">0개</span>
+        </div>
+        <input type="text" class="search-input" id="searchBox" placeholder="🔍  코드 검색">
+      </div>
+      <div class="table-wrap">
+        <div class="table-head">
+          <table>
+            <colgroup><col style="width:56px"><col><col style="width:110px"></colgroup>
+            <tr>
+              <th>No.</th>
+              <th>코드</th>
+              <th>생성일</th>
+            </tr>
+          </table>
+        </div>
+        <div class="table-body" id="tableBody">
+          <div class="empty-state">
+            <div class="e-icon">🔑</div>
+            <p class="e-title">생성된 코드가 없습니다</p>
+            <p class="e-sub">좌측에서 조건을 입력하고 코드를 생성하세요</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="btn-row">
-    <button id="generateBtn">난수번호 생성</button>
-    <button id="downloadBtn" disabled>엑셀 다운로드</button>
-  </div>
-
-  <div id="statusBox" class="status"></div>
-
-  <div id="previewWrap" class="preview">
-    <p>미리보기 (처음 10개)</p>
-    <div class="preview-box" id="previewList"></div>
-  </div>
-
-  <div class="footer-note">뒷자리 5자리 · 0/O 제외 · 숫자+영문 혼합 필수 · 중복 없음</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-let generatedCodes = [];
+const DB_KEY = 'ivg_code_db_v2';
+let currentCodes = [], currentDate = '';
 
-const LENGTH = 5;
-const EXCLUDE = ['0', 'O'];
+function today() {
+  const d = new Date();
+  return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+}
+
+const yearSel = document.getElementById('year');
+const thisYear = new Date().getFullYear();
+for (let y = thisYear; y <= 2050; y++) {
+  const o = document.createElement('option');
+  o.value = String(y); o.textContent = y + '년';
+  if (y === thisYear) o.selected = true;
+  yearSel.appendChild(o);
+}
+
+function loadDB() { try { return JSON.parse(localStorage.getItem(DB_KEY)||'[]'); } catch { return []; } }
+function saveDB(db) { try { localStorage.setItem(DB_KEY, JSON.stringify(db)); } catch {} }
+function getAllCodesSet() {
+  const s = new Set();
+  loadDB().forEach(e => e.codes.forEach(c => s.add(c)));
+  return s;
+}
 
 function buildPrefix() {
-  const product = document.getElementById('product').value.trim().toUpperCase();
-  const year = document.getElementById('year').value.trim();
-  const round = document.getElementById('round').value.trim();
-  const yearShort = year.length >= 2 ? year.slice(-2) : year;
-  return product + yearShort + round;
+  return document.getElementById('product').value +
+    document.getElementById('year').value.slice(-2) +
+    document.getElementById('round').value.trim();
 }
 
-function updatePrefixPreview() {
-  const prefix = buildPrefix();
-  document.getElementById('prefixPreview').textContent = prefix || '-';
+function updatePreview() {
+  document.getElementById('prefixPreview').textContent = (buildPrefix()||'-') + 'XXXXX';
+  checkWarn();
 }
 
-function generateCodes() {
-  const statusBox = document.getElementById('statusBox');
-  statusBox.style.display = 'none';
-  statusBox.className = 'status';
-
+function checkWarn() {
+  const db = loadDB();
+  const product = document.getElementById('product').value;
+  const ys = document.getElementById('year').value.slice(-2);
+  const round = parseInt(document.getElementById('round').value);
   const prefix = buildPrefix();
-  const count = parseInt(document.getElementById('count').value);
-
-  if (!prefix) {
-    showStatus('제품명, 해당년도, 회차를 모두 입력하세요.', 'error');
-    return;
-  }
-  if (!count || count < 1) {
-    showStatus('생성 개수를 올바르게 입력하세요.', 'error');
-    return;
-  }
-
-  const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const allDigits = '0123456789';
-  const letters = allLetters.split('').filter(c => !EXCLUDE.includes(c));
-  const digits = allDigits.split('').filter(c => !EXCLUDE.includes(c));
-  const pool = letters.concat(digits);
-
-  const maxPossible = Math.pow(pool.length, LENGTH);
-  if (count > maxPossible * 0.9) {
-    showStatus('요청한 개수가 너무 많습니다. 5자리 조건으로는 최대 약 ' + Math.floor(maxPossible * 0.9).toLocaleString() + '개까지 생성 가능합니다.', 'error');
-    return;
-  }
-
-  const results = new Set();
-  let attempts = 0;
-  const maxAttempts = count * 200 + 1000000;
-
-  while (results.size < count && attempts < maxAttempts) {
-    attempts++;
-    let code = '';
-    for (let i = 0; i < LENGTH; i++) {
-      code += pool[Math.floor(Math.random() * pool.length)];
+  const warn = document.getElementById('dupWarning');
+  const existing = db.find(e => e.prefix === prefix);
+  if (existing) {
+    warn.style.display = 'block';
+    warn.innerHTML = '⚠️ <strong>' + prefix + '</strong>는 ' + existing.date + '에 이미 ' + existing.codes.length.toLocaleString() + '개 생성된 이력이 있습니다.';
+  } else {
+    const maxR = db.filter(e=>e.product===product&&e.year===ys).map(e=>e.round).sort((a,b)=>b-a)[0]||0;
+    if (maxR > 0 && round < maxR) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>' + product + ' ' + ys + '년형</strong>은 ' + maxR + '회차까지 작업됐습니다. ' + round + '회차는 이미 지난 회차입니다.';
+    } else {
+      warn.style.display = 'none';
     }
-    const hasDigit = /[0-9]/.test(code);
-    const hasAlpha = /[A-Z]/.test(code);
-    if (!hasDigit || !hasAlpha) continue;
-    results.add(code);
   }
+}
 
-  if (results.size < count) {
-    showStatus('코드를 충분히 생성하지 못했습니다. 개수를 줄이고 다시 시도해주세요.', 'error');
-    return;
-  }
+function renderHistory() {
+  const db = loadDB();
+  const total = db.reduce((s,e)=>s+e.codes.length,0);
+  document.getElementById('statTotal').textContent = total.toLocaleString();
+  document.getElementById('dbBadgeCount').textContent = total.toLocaleString();
+  const el = document.getElementById('historyList');
+  if (!db.length) { el.innerHTML='<p style="font-size:13px;color:var(--text-3);text-align:center;padding:20px 0">저장된 이력이 없습니다</p>'; return; }
+  el.innerHTML = db.slice().reverse().map(e=>
+    '<div class="history-item"><div><p class="hi-prefix">'+e.prefix+'</p><p class="hi-meta">'+e.codes.length.toLocaleString()+'개 · '+e.date+'</p></div>' +
+    '<button class="hi-del" onclick="delEntry(\''+e.prefix+'\')">✕</button></div>'
+  ).join('');
+}
 
-  const finalList = Array.from(results).sort();
-  generatedCodes = finalList.map(c => prefix + c);
-
-  showStatus('생성 완료: ' + generatedCodes.length.toLocaleString() + '개 (중복 없음)', 'success');
-
-  const previewWrap = document.getElementById('previewWrap');
-  const previewList = document.getElementById('previewList');
-  previewList.textContent = generatedCodes.slice(0, 10).join('  ·  ');
-  previewWrap.style.display = 'block';
-
-  document.getElementById('downloadBtn').disabled = false;
+function delEntry(prefix) {
+  if (!confirm(prefix+' 이력을 삭제할까요?')) return;
+  saveDB(loadDB().filter(e=>e.prefix!==prefix));
+  renderHistory();
+  showStatus(prefix+' 이력이 삭제되었습니다.','warning');
 }
 
 function showStatus(msg, type) {
-  const statusBox = document.getElementById('statusBox');
-  statusBox.textContent = msg;
-  statusBox.className = 'status ' + type;
-  statusBox.style.display = 'block';
+  const box = document.getElementById('statusBox');
+  box.innerHTML=msg; box.className='status-box '+type; box.style.display='block';
+}
+
+function renderTable(codes, date) {
+  const d = date||currentDate||today();
+  document.getElementById('listCount').textContent = codes.length.toLocaleString()+'개';
+  const body = document.getElementById('tableBody');
+  if (!codes.length) {
+    body.innerHTML='<div class="empty-state"><div class="e-icon">🔍</div><p class="e-title">검색 결과가 없습니다</p></div>';
+    return;
+  }
+  let html = '<table style="width:100%;border-collapse:collapse;table-layout:fixed"><colgroup><col style="width:56px"><col><col style="width:110px"></colgroup>';
+  codes.slice(0,500).forEach((code,i)=>{
+    html += '<tr><td class="td-num" style="padding:10px 14px;border-bottom:1px solid var(--border)">'+(i+1)+'</td>' +
+      '<td class="td-code" style="padding:10px 14px;border-bottom:1px solid var(--border);font-family:monospace;font-weight:500">'+code+'</td>' +
+      '<td class="td-date" style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-3)">'+d+'</td></tr>';
+  });
+  html += '</table>';
+  if (codes.length>500) html += '<div style="text-align:center;padding:14px;font-size:13px;color:var(--text-3)">외 '+(codes.length-500).toLocaleString()+'개 · 엑셀에서 전체 확인</div>';
+  body.innerHTML = html;
+}
+
+function generateCodes() {
+  document.getElementById('statusBox').style.display='none';
+  const prefix=buildPrefix(), count=parseInt(document.getElementById('count').value);
+  if (!prefix||prefix.length<2) { showStatus('모든 항목을 입력하세요.','error'); return; }
+  if (!count||count<1) { showStatus('생성 개수를 올바르게 입력하세요.','error'); return; }
+
+  const allInDB=getAllCodesSet();
+  const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(c=>c!=='O');
+  const digits='123456789'.split('');
+  const pool=letters.concat(digits);
+
+  if (count>Math.pow(pool.length,5)*0.9) { showStatus('요청 개수가 너무 많습니다.','error'); return; }
+
+  const results=new Set();
+  let att=0;
+  while (results.size<count&&att<count*300+1000000) {
+    att++;
+    let code='';
+    for (let i=0;i<5;i++) code+=pool[Math.floor(Math.random()*pool.length)];
+    if (!/[0-9]/.test(code)||!/[A-Z]/.test(code)) continue;
+    const full=prefix+code;
+    if (!allInDB.has(full)) results.add(full);
+  }
+
+  if (results.size<count) { showStatus('DB 중복 제거 후 '+results.size.toLocaleString()+'개만 생성됩니다. 개수를 줄이거나 회차를 높여주세요.','error'); return; }
+
+  currentDate=today();
+  currentCodes=Array.from(results).sort();
+
+  const db=loadDB();
+  const ex=db.find(e=>e.prefix===prefix);
+  if (ex) { ex.codes=[...new Set([...ex.codes,...currentCodes])]; ex.date=currentDate; }
+  else db.push({prefix, product:document.getElementById('product').value, year:document.getElementById('year').value.slice(-2), round:parseInt(document.getElementById('round').value), codes:currentCodes, date:currentDate});
+  saveDB(db);
+
+  document.getElementById('statNow').textContent=currentCodes.length.toLocaleString();
+  document.getElementById('statDup').textContent='없음';
+  renderHistory(); renderTable(currentCodes,currentDate); checkWarn();
+  showStatus('✅ '+currentCodes.length.toLocaleString()+'개 생성 완료 · '+currentDate+' · DB 저장됨','success');
+  document.getElementById('downloadBtn').disabled=false;
+  document.getElementById('copyBtn').disabled=false;
 }
 
 function downloadExcel() {
-  if (generatedCodes.length === 0) return;
-
-  const wb = XLSX.utils.book_new();
-  const wsData = [['번호', '코드']];
-  generatedCodes.forEach((code, i) => {
-    wsData.push([i + 1, code]);
-  });
-  const ws = XLSX.utils.aoa_to_sheet(wsData);
-  ws['!cols'] = [{ wch: 10 }, { wch: 20 }];
-  XLSX.utils.book_append_sheet(wb, ws, '난수코드');
-
-  const prefix = buildPrefix() || 'CODE';
-  XLSX.writeFile(wb, prefix + '_난수번호_' + generatedCodes.length + '.xlsx');
+  if (!currentCodes.length) return;
+  const wb=XLSX.utils.book_new();
+  const ws=XLSX.utils.aoa_to_sheet([['번호','코드','생성일'],...currentCodes.map((c,i)=>[i+1,c,currentDate])]);
+  ws['!cols']=[{wch:8},{wch:20},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,ws,'난수코드');
+  const b64=XLSX.write(wb,{bookType:'xlsx',type:'base64'});
+  const a=document.createElement('a');
+  a.href='data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'+b64;
+  a.download=buildPrefix()+'_난수번호_'+currentCodes.length+'_'+currentDate.replace(/\./g,'')+'.xlsx';
+  a.target='_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 
-document.getElementById('product').addEventListener('input', updatePrefixPreview);
-document.getElementById('year').addEventListener('input', updatePrefixPreview);
-document.getElementById('round').addEventListener('input', updatePrefixPreview);
-document.getElementById('generateBtn').addEventListener('click', generateCodes);
-document.getElementById('downloadBtn').addEventListener('click', downloadExcel);
+document.getElementById('product').addEventListener('change',updatePreview);
+document.getElementById('year').addEventListener('change',updatePreview);
+document.getElementById('round').addEventListener('input',updatePreview);
+document.getElementById('generateBtn').addEventListener('click',generateCodes);
+document.getElementById('downloadBtn').addEventListener('click',downloadExcel);
+document.getElementById('copyBtn').addEventListener('click',()=>{
+  if (!currentCodes.length) return;
+  navigator.clipboard.writeText(currentCodes.join('\n')).then(()=>showStatus('클립보드에 복사되었습니다.','success'));
+});
+document.getElementById('clearDbBtn').addEventListener('click',()=>{
+  if (!confirm('전체 DB를 초기화할까요? 되돌릴 수 없습니다.')) return;
+  saveDB([]); renderHistory(); showStatus('DB가 초기화되었습니다.','warning');
+});
+document.getElementById('searchBox').addEventListener('input',e=>{
+  const q=e.target.value.trim().toUpperCase();
+  renderTable(q?currentCodes.filter(c=>c.includes(q)):currentCodes,currentDate);
+});
 
-updatePrefixPreview();
+updatePreview();
+renderHistory();
 </script>
-
 </body>
 </html>
