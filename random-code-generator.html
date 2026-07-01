@@ -508,7 +508,7 @@ function generateCodes() {
   saveDB(db);
   document.getElementById("statNow").textContent=currentCodes.length.toLocaleString();
   document.getElementById("statDup").textContent="없음";
-  renderHistory(); renderTable(currentCodes,currentDate); checkWarn();
+  renderHistory(); renderTable(currentCodes,currentDate); document.getElementById("dupWarning").style.display="none";
   showStatus("✅ "+currentCodes.length.toLocaleString()+"개 생성 완료 · "+currentDate+" · DB 저장됨","success");
   document.getElementById("downloadBtn").disabled=false;
   document.getElementById("copyBtn").disabled=false;
