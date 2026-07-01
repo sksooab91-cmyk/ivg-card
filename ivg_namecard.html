@@ -187,8 +187,8 @@ body {
       <label>직책 (한국어)<input id="f-title-kr" value="파트장 / 디자인센터" oninput="update()"></label>
       <label>직책 (영문)<input id="f-title-en" value="Part Lead / Design Center" oninput="update()"></label>
       <label>이메일<input id="f-email" value="sjlee@ivg.co.kr" oninput="update()"></label>
-      <label>전화번호<input id="f-phone" value="+82 10-8276-2287" oninput="update()"></label>
-      <label style="grid-column:span 2">주소<input id="f-addr" value="경기도 고양시 덕양구 청초로 10, 덕은GL메트로시티한강 A1 1505" oninput="update()"></label>
+      <label>전화번호 (예: 01082762287)<input id="f-phone" value="01082762287" oninput="update()"></label>
+      <label style="grid-column:span 2">주소 (수정 불가)<input id="f-addr" value="경기도 고양시 덕양구 청초로 10, 덕은GL메트로시티한강 A1 1505" readonly style="background:#f0f0f0; color:#999; cursor:not-allowed;"></label>
     </div>
   </div>
 
@@ -232,7 +232,7 @@ body {
               <circle cx="12" cy="9" r="2.5" stroke="white" stroke-width="2" fill="none"/>
             </svg>
           </div>
-          <span id="d-addr">경기도 고양시 덕양구 청초로 10, 덕은GL메트로시티한강 A1 1505</span>
+          <span id="d-addr">경기도 고양시 덕양구 청초로 10, 덕은지엘메트로시티 지식산업센터 AA 1505호</span>
         </div>
       </div>
     </div>
@@ -290,13 +290,24 @@ body {
 </div>
 
 <script>
+function formatPhone(raw) {
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length === 11 && digits.startsWith('010')) {
+    return '+82 ' + digits.slice(1,3) + ' ' + digits.slice(3,7) + ' ' + digits.slice(7);
+  }
+  if (digits.length === 10 && digits.startsWith('01')) {
+    return '+82 ' + digits.slice(1,2) + ' ' + digits.slice(2,6) + ' ' + digits.slice(6);
+  }
+  return raw;
+}
+
 function update() {
   document.getElementById('d-name-kr').textContent = document.getElementById('f-name-kr').value;
   document.getElementById('d-name-en').textContent = document.getElementById('f-name-en').value;
   document.getElementById('d-title-kr').textContent = document.getElementById('f-title-kr').value;
   document.getElementById('d-title-en').textContent = document.getElementById('f-title-en').value;
   document.getElementById('d-email').textContent = document.getElementById('f-email').value;
-  document.getElementById('d-phone').textContent = document.getElementById('f-phone').value;
+  document.getElementById('d-phone').textContent = formatPhone(document.getElementById('f-phone').value);
   document.getElementById('d-addr').textContent = document.getElementById('f-addr').value;
 }
 
@@ -307,7 +318,7 @@ function openSavePage() {
     titleKr: document.getElementById('f-title-kr').value,
     titleEn: document.getElementById('f-title-en').value,
     email: document.getElementById('f-email').value,
-    phone: document.getElementById('f-phone').value,
+    phone: formatPhone(document.getElementById('f-phone').value),
     addr: document.getElementById('f-addr').value,
     mode: 'save'
   });
