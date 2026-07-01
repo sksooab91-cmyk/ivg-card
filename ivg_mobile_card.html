@@ -320,6 +320,37 @@ function loadFromParams() {
   }
 }
 
+function saveImage() {
+  const btn = document.getElementById('save-btn');
+  btn.textContent = '저장 중...';
+  btn.disabled = true;
+  const card = document.getElementById('card-save');
+  card.style.boxShadow = 'none';
+  html2canvas(card, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    logging: false,
+    width: 540,
+    height: 835
+  }).then(canvas => {
+    const finalCanvas = document.createElement('canvas');
+    finalCanvas.width = 1080;
+    finalCanvas.height = 1670;
+    const ctx = finalCanvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 1080, 1670);
+    ctx.drawImage(canvas, 0, 0, 1080, 1670);
+    const link = document.createElement('a');
+    link.download = '모바일명함.png';
+    link.href = finalCanvas.toDataURL('image/png');
+    link.click();
+    card.style.boxShadow = '';
+    btn.textContent = '⬇️ PNG로 저장 (1080×1670)';
+    btn.disabled = false;
+  });
+}
+
 loadFromParams();
 update();
 </script>
