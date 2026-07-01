@@ -108,7 +108,7 @@ body {
 .card-logo { width: 100%; max-width: 380px; }
 .card-logo img { width: 100%; height: auto; display: block; }
 .card-spacer { flex: 1; }
-.card-spacer2 { flex: 1; }
+.card-spacer2 { flex: 0; min-height: 40px; }
 .name-kr { font-size: 44px; font-weight: 900; color: #1c3eb8; letter-spacing: 8px; line-height: 1.2; }
 .name-en { font-size: 24px; font-weight: 500; color: #1c3eb8; margin-top: 6px; }
 .info-title { font-size: 18px; color: #222; line-height: 1.6; margin-top: 28px; }
@@ -123,7 +123,7 @@ body {
   top: 0;
   background: #fff;
   width: 540px;
-  height: 835px;
+  height: 620px;
   display: flex;
   flex-direction: column;
   padding: 64px 48px;
@@ -234,11 +234,11 @@ function saveImage() {
     backgroundColor: '#ffffff',
     logging: false,
     width: 540,
-    height: 835
+    height: 620
   }).then(canvas => {
     const finalCanvas = document.createElement('canvas');
     finalCanvas.width = 1080;
-    finalCanvas.height = 1670;
+    finalCanvas.height = 1240;
     const ctx = finalCanvas.getContext('2d');
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, 1080, 1670);
